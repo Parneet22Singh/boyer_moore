@@ -1,0 +1,18 @@
+[project]
+name = "bmsearch"
+version = "0.1.0"
+description = "A local pattern-search app and performance lab powered by Boyer-Moore"
+requires-python = ">=3.9"
+
+[project.scripts]
+bmsearch = "bmsearch.cli:main"
+bmsearch-ui = "bmsearch.web:main"
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools]
+packages = ["bmsearch"]
+
+[tool.setuptools.package-data]
+bmsearch = ["web/*.html", "web/*.css", "web/*.js"]

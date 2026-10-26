@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <meta name="description" content="Search text with Boyer–Moore and compare eight string-matching algorithms.">
+  <title>BM Search — Pattern Lab</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="BM Search home">
+        <span class="brand-mark"><span></span><span></span><span></span><span></span></span>
+        <span class="brand-name">pattern<span>lab</span></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-item active" type="button" data-view="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.4 4.4"></path></svg>
+          <span>Pattern search</span>
+        </button>
+        <button class="nav-item" type="button" data-view="benchmark">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5h16"></path><path d="M7 16V10"></path><path d="M12 16V5"></path><path d="M17 16v-3"></path></svg>
+          <span>Algorithm lab</span>
+          <span class="nav-count">08</span>
+        </button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-divider"></div>
+        <div class="engine-card">
+          <div class="engine-heading"><span class="status-dot"></span> ENGINE STATUS</div>
+          <div class="engine-name">Boyer–Moore <span>ready</span></div>
+          <p>Bad-character + good-suffix, optimized with Galil's rule.</p>
+        </div>
+        <div class="sidebar-foot"><span class="local-icon"></span> Runs locally on your machine</div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><span>Workspace</span><span class="crumb-slash">/</span><strong id="breadcrumb-current">Pattern search</strong></div>
+        <div class="topbar-meta"><span class="topbar-indicator"></span> LOCAL SESSION <span class="topbar-divider"></span><span id="current-date"></span></div>
+      </header>
+
+      <section class="view-panel active" id="search-view">
+        <div class="hero">
+          <div class="eyebrow"><span class="eyebrow-line"></span> STRING MATCHING WORKSPACE</div>
+          <div class="hero-row">
+            <div>
+              <h1>Find your <span>pattern.</span></h1>
+              <p>Search text with precision. See every match, its location, and how the algorithm got there.</p>
+            </div>
+            <div class="hero-badge"><span class="badge-spark">✳</span><span>POWERED BY<br><strong>BOYER–MOORE</strong></span></div>
+          </div>
+        </div>
+
+        <form class="search-card" id="search-form">
+          <div class="card-heading">
+            <div><span class="step-number">01</span><span class="section-title">Configure your search</span></div>
+            <span class="helper-label">LITERAL MATCH · CASE SENSITIVE</span>
+          </div>
+          <label class="field-label" for="pattern-input">Pattern to find</label>
+          <div class="pattern-wrap">
+            <svg class="input-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.4 4.4"></path></svg>
+            <input id="pattern-input" name="pattern" type="text" placeholder="Type a word, phrase, or sequence…" autocomplete="off" required>
+            <span class="shortcut-hint">ENTER ↵</span>
+          </div>
+          <div class="field-row">
+            <div class="field-group algorithm-field">
+              <label class="field-label" for="algorithm-select">Search algorithm</label>
+              <div class="select-wrap">
+                <select id="algorithm-select" name="algorithm">
+                  <option value="BM-galil" selected>Boyer–Moore + Galil (recommended)</option>
+                  <option value="BM-full">Boyer–Moore · Full</option>
+                  <option value="BM-full-ext">Boyer–Moore · Extended</option>
+                  <option value="BM-bc">Boyer–Moore · Bad character</option>
+                  <option value="BM-bc-ext">Boyer–Moore · Bad character extended</option>
+                  <option value="BM-gs">Boyer–Moore · Good suffix</option>
+                  <option value="horspool">Horspool</option>
+                  <option value="naive">Naive baseline</option>
+                </select>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"></path></svg>
+              </div>
+            </div>
+            <div class="algorithm-note"><span class="note-icon">i</span><span>Compare strategies in the <button type="button" class="inline-link" data-view="benchmark">algorithm lab</button>.</span></div>
+          </div>
+          <div class="field-group text-field">
+            <div class="text-label-row">
+              <label class="field-label" for="source-input">Text to search</label>
+              <div class="text-tools">
+                <label class="file-button" for="file-input"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10.5V2.75m0 0L5.25 5.5M8 2.75 10.75 5.5M3 9.75v2.5c0 .55.45 1 1 1h8c.55 0 1-.45 1-1v-2.5"></path></svg>Load a text file</label>
+                <input id="file-input" type="file" accept=".txt,.md,.csv,.log,.py,.js,.json,.html,.css,.xml,.yaml,.yml,.toml,text/plain">
+                <span id="character-count">0 characters</span>
+              </div>
+            </div>
+            <textarea id="source-input" name="text" rows="7" placeholder="Paste or type the text you want to search…" spellcheck="false" required></textarea>
+          </div>
+          <div class="search-actions">
+            <span class="privacy-note"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="7" width="9" height="7" rx="1.5"></rect><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"></path></svg> Your text stays on this device</span>
+            <button class="primary-button" id="search-button" type="submit"><span>Find matches</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h12m-5-5 5 5-5 5"></path></svg></button>
+          </div>
+        </form>
+
+        <section class="results-section" id="search-results" hidden>
+          <div class="results-heading">
+            <div><div class="eyebrow"><span class="eyebrow-line"></span> SEARCH OUTPUT</div><h2>Results <span class="result-count" id="result-count"></span></h2></div>
+            <div class="result-meta" id="result-meta"></div>
+          </div>
+          <div class="metric-grid">
+            <article class="metric-card"><span class="metric-label">MATCHES FOUND</span><strong id="metric-matches">—</strong><span class="metric-foot">Across all lines</span></article>
+            <article class="metric-card"><span class="metric-label">CHARACTER COMPARISONS</span><strong id="metric-comparisons">—</strong><span class="metric-foot">Operations performed</span></article>
+            <article class="metric-card"><span class="metric-label">SEARCH TIME</span><strong id="metric-time">—</strong><span class="metric-foot">Pattern preprocessing included</span></article>
+          </div>
+          <div class="matches-card">
+            <div class="matches-header"><div><span class="section-title">Match locations</span><span class="matches-subtitle" id="matches-subtitle"></span></div><span class="result-columns">LINE &nbsp;·&nbsp; COLUMN</span></div>
+            <div class="matches-list" id="matches-list"></div>
+          </div>
+        </section>
+        <div class="error-banner" id="search-error" role="alert" hidden></div>
+
+        <footer class="page-footer"><span>BM SEARCH <span class="footer-separator">/</span> PATTERN LAB</span><span>BUILT FOR EXACT MATCHING</span></footer>
+      </section>
+
+      <section class="view-panel" id="benchmark-view">
+        <div class="hero benchmark-hero">
+          <div class="eyebrow"><span class="eyebrow-line"></span> PERFORMANCE STUDIO</div>
+          <div class="hero-row">
+            <div>
+              <h1>Measure the <span>match.</span></h1>
+              <p>Put eight string-search algorithms to work across diverse text profiles and adversarial patterns.</p>
+            </div>
+            <div class="benchmark-mark"><span>08</span><small>ALGORITHMS<br>IN THE LINEUP</small></div>
+          </div>
+        </div>
+
+        <section class="benchmark-controls">
+          <div class="benchmark-control-copy"><div class="eyebrow">THE EXPERIMENT</div><h2>One dataset. Every algorithm.</h2><p>Same patterns, same text, same machine. Results are checked for correctness before they’re shown.</p></div>
+          <div class="benchmark-runner">
+            <label for="benchmark-size">TEXT SIZE</label>
+            <select id="benchmark-size"><option value="10000">10,000 chars</option><option value="20000" selected>20,000 chars</option><option value="50000">50,000 chars</option><option value="100000">100,000 chars</option></select>
+            <label for="benchmark-repetitions">TIMING RUNS</label>
+            <select id="benchmark-repetitions"><option value="1">1 run</option><option value="2" selected>2 runs</option><option value="3">3 runs</option></select>
+            <button class="primary-button benchmark-button" id="benchmark-button" type="button"><span>Run all benchmarks</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 10h12m-5-5 5 5-5 5"></path></svg></button>
+          </div>
+          <div class="benchmark-progress" id="benchmark-progress" hidden><span></span><span>Running all eight algorithms across text profiles and edge cases…</span></div>
+        </section>
+        <div class="error-banner" id="benchmark-error" role="alert" hidden></div>
+
+        <section id="benchmark-results" hidden>
+          <div class="benchmark-summary-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> RESULTS SNAPSHOT</div><h2>The numbers, <span>at a glance.</span></h2></div><span class="run-stamp" id="run-stamp"></span></div>
+          <div class="benchmark-metrics">
+            <article class="benchmark-stat"><span class="metric-label">SCENARIOS TESTED</span><strong id="scenario-total">—</strong><span class="metric-foot">Text profiles + edge cases</span></article>
+            <article class="benchmark-stat"><span class="metric-label">FASTEST AVERAGE</span><strong id="fastest-name">—</strong><span class="metric-foot" id="fastest-time">Lowest mean runtime</span></article>
+            <article class="benchmark-stat"><span class="metric-label">FEWEST COMPARISONS</span><strong id="fewest-name">—</strong><span class="metric-foot">Lowest mean comparisons / char</span></article>
+          </div>
+          <div class="chart-card">
+            <div class="chart-heading"><div><span class="section-title">Algorithm overview</span><span class="chart-subtitle">Average across all benchmark scenarios</span></div><div class="chart-toggle" role="group" aria-label="Chart metric"><button class="chart-tab active" data-metric="average_ms" type="button">Runtime</button><button class="chart-tab" data-metric="average_comparisons_per_char" type="button">Comparisons / char</button></div></div>
+            <div class="algorithm-chart" id="algorithm-chart"></div>
+            <div class="chart-axis"><span>LOWER IS BETTER</span><span id="chart-unit">AVERAGE TIME · MILLISECONDS</span></div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-heading"><div><span class="section-title">Scenario breakdown</span><span class="chart-subtitle">Per-algorithm performance by text profile</span></div><div class="detail-filter"><label for="scenario-filter">SHOW</label><select id="scenario-filter"><option value="all">All scenarios</option></select></div></div>
+            <div class="table-scroll"><table><thead><tr><th>SCENARIO</th><th>ALGORITHM</th><th>TEXT / PATTERN</th><th>HITS</th><th>COMPARISONS / CHAR</th><th>TIME</th></tr></thead><tbody id="benchmark-table"></tbody></table></div>
+          </div>
+        </section>
+        <div class="benchmark-empty" id="benchmark-empty"><div class="empty-visual"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="eyebrow">READY WHEN YOU ARE</div><h2>Let’s find the fastest match.</h2><p>Run the benchmark to compare all eight algorithms on realistic text and edge-case patterns.</p></div>
+        <footer class="page-footer"><span>BM SEARCH <span class="footer-separator">/</span> PERFORMANCE STUDIO</span><span>COMPARISONS · RUNTIME · CORRECTNESS</span></footer>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
