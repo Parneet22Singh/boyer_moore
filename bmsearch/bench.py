@@ -45,8 +45,7 @@ def main():
     ap.add_argument("--reps", type=int, default=3)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--csv")
-    ap.add_argument("--algos", nargs="+", default=["naive", "horspool", "BM-bc",
-                    "BM-gs", "BM-full", "BM-full-ext", "BM-galil"])
+    ap.add_argument("--algos", nargs="+", default=list(ALGORITHMS))
     a = ap.parse_args()
     n = a.n or (20_000 if a.quick else 200_000)
     lengths = [2, 4, 8, 16, 32, 64] if not a.quick else [4, 16, 64]
