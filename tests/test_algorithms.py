@@ -15,6 +15,12 @@ def brute(t, p):
 
 
 class TestAlgorithms(unittest.TestCase):
+    def test_algorithm_comparison_set(self):
+        self.assertEqual(
+            list(ALGORITHMS),
+            ["naive", "horspool", "BM-bc", "BM-bc-ext", "BM-gs", "BM-full", "BM-full-ext", "BM-galil"],
+        )
+
     def test_random_agreement(self):
         rnd = random.Random(7)
         for _ in range(4000):
