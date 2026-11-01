@@ -1,4 +1,4 @@
-"""Text / pattern generators covering different alphabet and structure regimes."""
+# Generate text and patterns for benchmark scenarios.
 import random
 import string
 from typing import Callable, Dict, List
@@ -25,7 +25,7 @@ def english_like(n: int, rnd: random.Random) -> str:
 
 
 def markov_text(n: int, rnd: random.Random, alphabet="acgt", stay=0.7) -> str:
-    """Repetitive text: each char repeats the previous with probability `stay`."""
+    # Each character repeats the previous one with probability `stay`.
     out, c = [], rnd.choice(alphabet)
     for _ in range(n):
         if rnd.random() > stay:
@@ -35,7 +35,7 @@ def markov_text(n: int, rnd: random.Random, alphabet="acgt", stay=0.7) -> str:
 
 
 def sample_patterns(text: str, lengths: List[int], rnd: random.Random) -> List[str]:
-    """Patterns copied from the text so they actually occur."""
+    # Sample patterns from the text so they are guaranteed to occur.
     return [text[(i := rnd.randrange(len(text) - m)):i + m] for m in lengths]
 
 
@@ -48,7 +48,6 @@ TEXT_GENERATORS: Dict[str, Callable[[int, random.Random], str]] = {
     "repetitive-DNA": lambda n, r: markov_text(n, r),
 }
 
-# Adversarial cases: name -> (text, pattern) factories
 def adversarial(n: int, m: int):
     return {
         "a^n / a^m (all match)": ("a" * n, "a" * m),

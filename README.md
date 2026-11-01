@@ -2,7 +2,7 @@
 
 BM Search is a local pattern-finding application with a polished browser interface and a command-line option. Search pasted text or run a controlled performance comparison across eight string-matching algorithms. Each match includes its line and column.
 
-The search engine is implemented in pure Python. Its default is Boyer–Moore with an extended bad-character table, the strong good-suffix rule and Galil's rule. The application can also run and compare all eight search algorithms. The interface and server run on your machine and require no third-party packages.
+The search engine is implemented in pure Python. Its default is Boyer–Moore with an extended bad-character table, the strong good-suffix rule and Galil's rule. The application can run and compare all eight search algorithms. The interface and server run on your machine and require no third-party packages.
 
 ## Launch the application
 

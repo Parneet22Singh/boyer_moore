@@ -1,15 +1,13 @@
-"""Preprocessing tables for Boyer-Moore."""
+# Preprocessing tables for Boyer-Moore.
 from bisect import bisect_left
 from typing import Dict, List
 
 
 def last_occurrence(p: str) -> Dict[str, int]:
-    """Classic bad-character table: rightmost index of each char in p."""
     return {c: i for i, c in enumerate(p)}
 
 
 def char_positions(p: str) -> Dict[str, List[int]]:
-    """Sorted index lists per character, for the extended bad-character rule."""
     pos: Dict[str, List[int]] = {}
     for i, c in enumerate(p):
         pos.setdefault(c, []).append(i)
@@ -17,9 +15,7 @@ def char_positions(p: str) -> Dict[str, List[int]]:
 
 
 def extended_bad_char_shift(pos: Dict[str, List[int]], c: str, j: int) -> int:
-    """Extended bad-character rule: align the nearest occurrence of c that lies
-    strictly LEFT of the mismatch index j. Always >= 1 (no max(1, .) needed).
-    O(log m) per query, O(m) space (vs O(m*sigma) for a full 2-D table)."""
+    # Shift to the nearest earlier occurrence of the mismatched character.
     lst = pos.get(c)
     if not lst:
         return j + 1
@@ -28,10 +24,9 @@ def extended_bad_char_shift(pos: Dict[str, List[int]], c: str, j: int) -> int:
 
 
 def good_suffix_table(p: str) -> List[int]:
-    """Strong good-suffix rule in O(m) via a border array.
+    """Build strong good-suffix shifts in linear time using pattern borders.
 
-    shift[j+1] is the safe shift after a mismatch at pattern index j;
-    shift[0] is the shift after a full match (= the pattern's smallest period).
+    Entry j + 1 handles a mismatch at index j; entry 0 handles a full match.
     """
     m = len(p)
     shift = [0] * (m + 1)

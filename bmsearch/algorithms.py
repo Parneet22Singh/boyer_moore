@@ -1,10 +1,13 @@
-"""String-search algorithms. Every search returns SearchResult(matches, comparisons)
-so algorithms can be compared by work done, not just wall-clock time."""
+# String-search algorithms and the Boyer-Moore matcher.
 from dataclasses import dataclass
 from typing import Callable, Dict, List
 
-from .tables import (char_positions, extended_bad_char_shift,
-                     good_suffix_table, last_occurrence)
+from .tables import (
+    char_positions,
+    extended_bad_char_shift,
+    good_suffix_table,
+    last_occurrence,
+)
 
 
 @dataclass
@@ -48,15 +51,7 @@ def horspool(text: str, pat: str) -> SearchResult:
 
 
 class BoyerMoore:
-    """Precompiled Boyer-Moore matcher for one pattern.
-
-    bad_char    : use the bad-character rule
-    good_suffix : use the strong good-suffix rule
-    extended    : bad-character rule uses nearest occurrence left of the mismatch
-                  (instead of the rightmost occurrence overall)
-    galil       : Galil's rule - after a match, skip re-comparing the overlapping
-                  border; makes the search O(n + m) even for periodic patterns
-    """
+    # Precompiled matcher with optional Boyer-Moore rules.
 
     def __init__(self, pat: str, bad_char=True, good_suffix=True,
                  extended=False, galil=False):
@@ -75,7 +70,7 @@ class BoyerMoore:
         if m == 0:
             return SearchResult(list(range(n + 1)), 0)
         gs, last, pos = self.gs, self.last, self.pos
-        out, cmp, s, skip = [], 0, 0, 0   # skip = prefix chars known to match (Galil)
+        out, cmp, s, skip = [], 0, 0, 0
         while s <= n - m:
             j = m - 1
             while j >= skip:
@@ -83,11 +78,11 @@ class BoyerMoore:
                 if p[j] != text[s + j]:
                     break
                 j -= 1
-            if j < skip:                          # full match
+            if j < skip:
                 out.append(s)
                 s += self.period if self.good_suffix else 1
                 skip = m - self.period if self.galil else 0
-            else:                                 # mismatch at j
+            else:
                 c = text[s + j]
                 a = gs[j + 1] if gs else 1
                 if last is not None:

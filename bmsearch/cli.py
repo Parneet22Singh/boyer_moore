@@ -1,4 +1,4 @@
-"""Command-line interface for searching literal patterns in text and files."""
+# Command-line interface for searching literal patterns in text and files.
 import argparse
 import sys
 from pathlib import Path
@@ -23,7 +23,11 @@ def _search_lines(
     return count
 
 
-def _search_file(path: Path, search: Callable[[str], SearchResult], output: TextIO) -> Tuple[int, Optional[str]]:
+def _search_file(
+    path: Path,
+    search: Callable[[str], SearchResult],
+    output: TextIO,
+) -> Tuple[int, Optional[str]]:
     try:
         with path.open(encoding="utf-8-sig") as file:
             return _search_lines(file, search, str(path), output), None

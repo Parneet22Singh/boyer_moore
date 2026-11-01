@@ -1,4 +1,4 @@
-"""Local web application for interactive pattern search and algorithm benchmarks."""
+# Local web application for search and benchmark APIs.
 import argparse
 import json
 import statistics
@@ -21,7 +21,7 @@ _BENCHMARK_ALGORITHMS = list(ALGORITHMS)
 
 
 def search_text(pattern: str, text: str, algorithm: str) -> Dict[str, object]:
-    """Search multiline text and return JSON-ready positions and basic metrics."""
+    # Return line locations and basic metrics for each match.
     if not isinstance(pattern, str) or not pattern:
         raise ValueError("Enter a non-empty pattern to search for.")
     if len(pattern) > _MAX_PATTERN_CHARS:
@@ -71,7 +71,7 @@ def search_text(pattern: str, text: str, algorithm: str) -> Dict[str, object]:
 
 
 def run_benchmark(size: int = 20_000, repetitions: int = 2) -> Dict[str, object]:
-    """Run reproducible text and adversarial scenarios with every registered algorithm."""
+    # Compare every algorithm on generated text and edge cases.
     if not isinstance(size, int) or isinstance(size, bool) or not 256 <= size <= 100_000:
         raise ValueError("Benchmark size must be between 256 and 100,000 characters.")
     if not isinstance(repetitions, int) or isinstance(repetitions, bool) or not 1 <= repetitions <= 3:

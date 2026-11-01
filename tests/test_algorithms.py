@@ -1,5 +1,5 @@
-import random
 import io
+import random
 import tempfile
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
@@ -15,6 +15,21 @@ def brute(t, p):
 
 
 class TestAlgorithms(unittest.TestCase):
+    def test_algorithm_comparison_set(self):
+        self.assertEqual(
+            list(ALGORITHMS),
+            [
+                "naive",
+                "horspool",
+                "BM-bc",
+                "BM-bc-ext",
+                "BM-gs",
+                "BM-full",
+                "BM-full-ext",
+                "BM-galil",
+            ],
+        )
+
     def test_random_agreement(self):
         rnd = random.Random(7)
         for _ in range(4000):
@@ -40,8 +55,7 @@ class TestAlgorithms(unittest.TestCase):
         self.assertEqual(ALGORITHMS["BM-full"]("héllo wörld héllo", "héllo").matches, [0, 12])
 
     def test_good_suffix_known_table(self):
-        # GCAGAGAG (hand-verified): e.g. shift[4]=2 because suffix AGAG recurs at
-        # index 2 preceded by C; shift[5]=7 because only the border "G" survives.
+        # The suffix AGAG recurs earlier in GCAGAGAG, preceded by a different character.
         self.assertEqual(good_suffix_table("GCAGAGAG"), [7, 7, 7, 7, 2, 7, 4, 7, 1])
 
     def test_galil_is_linear(self):
@@ -49,7 +63,7 @@ class TestAlgorithms(unittest.TestCase):
         r = ALGORITHMS["BM-galil"]("a" * n, "a" * m)
         self.assertLess(r.comparisons, 3 * n)
         r2 = ALGORITHMS["BM-full"]("a" * n, "a" * m)
-        self.assertGreater(r2.comparisons, 10 * n)  # quadratic-ish without Galil
+        self.assertGreater(r2.comparisons, 10 * n)
 
     def test_comparisons_sublinear_on_large_alphabet(self):
         rnd = random.Random(1)
